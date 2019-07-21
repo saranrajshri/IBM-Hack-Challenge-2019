@@ -13,12 +13,8 @@ The Demo Video and Presentation are uploaded in this root directory
 Install Dependencies
 
 ```bash
-pip3 install flask
-pip3 install tweepy
-pip3 install praw
-pip3 install scikit-learn
-pip3 install numpy
-pip3 install pandas
+cd flask
+pip3 install -r requirements.txt
 pip install  "ibm-watson>=3.0.3"
 ```
 # Run Flask
