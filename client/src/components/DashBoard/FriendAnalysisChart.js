@@ -39,7 +39,7 @@ class FriendAnalysisChart extends React.Component {
     var twoClusterPercentage =
       (twoClusterCount / this.context.friendsData.length) * 100;
     const data = {
-      labels: ["0", "1", "2"],
+      labels: ["Moderate Postivity", "High Positivity", "Low Positivity"],
       datasets: [
         {
           label: "Types Of Persons",
