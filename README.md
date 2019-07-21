@@ -14,8 +14,8 @@ Install Dependencies
 
 ```bash
 cd flask
-pip3 install -r requirements.txt
-pip install  "ibm-watson>=3.0.3"
+sudo pip3 install -r "requirements.txt"
+pip3 install  "ibm-watson>=3.0.3"
 ```
 # Run Flask
 
