@@ -2,6 +2,7 @@ from flask import Flask
 from flask import jsonify
 from flask_cors import CORS
 from flask import request
+from flask import Flask, send_from_directory
 
 # Tweepy
 from tweepy import OAuthHandler
@@ -18,6 +19,7 @@ import re
 import csv
 import pickle
 import gzip
+import requests
 from os.path import join, dirname
 
 # watson
@@ -28,7 +30,7 @@ from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptio
 # Scikit leanr
 from sklearn.metrics.pairwise import cosine_similarity
 
-app=Flask(__name__)
+app=Flask(__name__,static_folder='./client/build/')
 
 # Twitter Api Credentials
 consumer_key="29t0d6bCnEPbWynevgwubCWAZ"
@@ -61,6 +63,7 @@ def getUserDetails():
     tweets=item.statuses_count
     friends=[]
     subreddits_data=[]
+    stackoverflow_data=[]
     # get friends name and append it to the list
     for friend in item.friends():
         friends.append(friend.screen_name)
@@ -83,6 +86,15 @@ def getUserDetails():
         subreddits=reddit.user.subreddits(limit=100)
         for reddit_item in subreddits:
             subreddits_data.append(reddit_item.display_name)
+    
+    # Get Stack OverFlow Tags
+    stackoverflow_id=request.args.get("stackOverflowID")
+
+    if(stackoverflow_id!=""):
+        stackapi_url="https://api.stackexchange.com/2.2/users/"+stackoverflow_id+"/tags?order=desc&sort=popular&site=stackoverflow"
+        r=requests.get(url=stackapi_url)
+        stack_data=r.json()
+        stackoverflow_data.append(stack_data)   
 
     data={
         "name":item.name,
@@ -91,7 +103,8 @@ def getUserDetails():
         "tweets_count":tweets,
         "friends_count":len(friends),
         "profile_pic_url":item.profile_image_url,
-        "subreddits":subreddits_data
+        "subreddits":subreddits_data,
+        "stackoverflow_data":stackoverflow_data
     }
 
     return jsonify(data)
@@ -187,11 +200,17 @@ def getData():
 	    features=Features(sentiment=SentimentOptions())).get_result()
     return(json.dumps(response, indent=2))
 
+
+############################# FRIENDS ANALYSIS #############################################
+
 # Get Friends Tweets And Calculate Personality Insights
 @app.route('/api/getFriendsData/',methods=['GET','POST'])
 def getFriendsTweetsAndCalcPersonalityInsights():
     
     username=request.args.get('username')
+    reddit_name=request.args.get('redditName')
+    stackoverflowid=request.args.get('stackOverflowID')
+
     item=auth_api.get_user(username)
     tweets=[]
     tweet_count=0
@@ -215,6 +234,9 @@ def getFriendsTweetsAndCalcPersonalityInsights():
         if tweet_count==200:
             break
     
+    
+        
+
     #Store the tweets for later use
     data={
         'tweets':tweets
@@ -235,6 +257,14 @@ def getFriendsTweetsAndCalcPersonalityInsights():
         profile['name']=item.name
         profile['screen_name']=item.screen_name
         profile['profile_pic_url']=item.profile_image_url
+
+        # Get Stack OverFlow Tags
+        
+        if(stackoverflowid!=None or stackoverflowid!=""):
+            stackapi_url="https://api.stackexchange.com/2.2/users/"+stackoverflowid+"/tags?order=desc&sort=popular&site=stackoverflow"
+            r=requests.get(url=stackapi_url)
+            friends_stack_data=r.json()
+            profile['stackoverflow_data']=friends_stack_data
 
         # Getting Specific data for predicting the cluster
         openess=json.dumps(profile['personality'][0]["percentile"])
@@ -267,3 +297,15 @@ def getFriendsTweetsAndCalcPersonalityInsights():
     print("got result for =>",username)
     return result    
 
+# Serve React App
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, port=5000, threaded=True)
