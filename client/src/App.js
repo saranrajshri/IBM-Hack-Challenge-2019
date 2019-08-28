@@ -20,7 +20,9 @@ class App extends React.Component {
     this.state = {
       userData: [],
       userPersonalityData: [],
-      friendsData: []
+      friendsData: [],
+      friendsRedditData: {},
+      friendsStackOverflowData: {}
     };
   }
 
@@ -45,8 +47,24 @@ class App extends React.Component {
     });
   };
 
+  // update new friends list
+  updateFriendsListData = data => {
+    this.setState({
+      userData: data
+    });
+  };
+
+  // update friends Reddit name
+  updateFriendsRedditData = (userName, redditName) => {
+    var tempData = this.state.friendsRedditData;
+    tempData[userName] = redditName;
+  };
+  updateFriendsStackOverflowData = (userName, stackOverflowID) => {
+    var tempData = this.state.friendsStackOverflowData;
+    tempData[userName] = stackOverflowID;
+  };
+
   render() {
-    console.log(this.state.userData);
     return (
       <div className="App">
         <UserContext.Provider
@@ -54,7 +72,10 @@ class App extends React.Component {
             ...this.state,
             updateUserData: this.updateUserData,
             updateUserPersonalityData: this.updateUserPersonalityData,
-            updateFriendsData: this.updateFriendsData
+            updateFriendsData: this.updateFriendsData,
+            updateFriendsListData: this.updateFriendsListData,
+            updateFriendsRedditData: this.updateFriendsRedditData,
+            updateFriendsStackOverflowData: this.updateFriendsStackOverflowData
           }}
         >
           <AppBar />
