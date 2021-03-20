@@ -21,7 +21,7 @@ ibm-watson==3.1.2
 idna==2.8
 isort==4.3.21
 itsdangerous==1.1.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 joblib==0.13.2
 kazam==1.4.5
 keyring==10.6.0
