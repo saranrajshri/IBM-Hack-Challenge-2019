@@ -1,46 +1,56 @@
-## IBM-Hack-Challenge-2019
+<h1 align="center">
+  Friend Affinity Finder
+  <br>
+</h1>
 
-Demo Link - https://friendaffinityfinder.herokuapp.com
+<h4 align="center">Friend Affinity Finder build on top of <a href="http://reactjs.org" target="_blank">React</a>.</h4>
 
-# Demo
-# Youtube Link
-YouTube Link - https://www.youtube.com/watch?v=8EqrSbvAauY
+<div align="center">
+<img src="https://data.apksum.com/a4/com.alpha.newcontacts/6.1.2/icon.png" />
+</div>
 
-The Demo Video and Presentation are uploaded in this root directory
+<p align="center">
+  <a href="https://youtu.be/0dc1Fh-vWdU">Video Demo</a> *
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#download">Download</a> •
+  <a href="#license">License</a>
+</p>
 
 
 
+## How To Use
 
-# Installation
-
-
-# Setup Flask
-
-Install Dependencies
-
-```bash
-cd flask
-sudo pip3 install -r "requirements.txt"
-pip3 install  "ibm-watson>=3.0.3"
-```
-# Run Flask
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
 ```bash
-cd flask
-export FLASK_APP=server.py
-flask run
+# Clone this repository
+$ git clone https://github.com/saranrajshri/tweezy
+
+# Go into the repository
+$ cd tweezy
+
+# Install dependencies
+$ cd client
+$ npm install
+
+$ pip install -r requirements.txt
+
+# Run the frontend
+$ cd client
+$ npm start
+
+# Run the server
+$ cd ..
+$ python3 sever.py
 ```
 
-# Setup React
+Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
-```
-cd client
-npm install
-```
+## Contributors
 
-# Run React
-```bash
-npm start
-```
+- Shri Saran Raj
 
-The React Server Will Run On localhost:3000
+
+## License
+
+MIT
